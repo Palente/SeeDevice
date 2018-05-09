@@ -32,8 +32,6 @@ class SeeDevice extends PluginBase implements Listener{
 public static function getInstance(){
 	return self::$instance;
 	}
-#END OF THE PLUGIIINACER ZE Z ZOSN
-}
 public function onPacketReceived(DataPacketReceiveEvent $e){
     if($e->getPacket() instanceof \pocketmine\network\mcpe\protocol\LoginPacket){
       if($e->getPacket()->clientData["DeviceOS"] !== null){
@@ -51,7 +49,7 @@ public function getUD(Player $player){
 }
 #Traduction des Versions oui car sa retourne un chiffre enft mek
 public function translateVersion($fdp){
-  switch($fdp)
+  switch($fdp){
     case 1:
   $akha = "Android";
   break;
@@ -90,6 +88,7 @@ public function translateVersion($fdp){
   $akha = "Spoil casa de papel Moscou is dead.";
   break;
   }
+}
 }
 #We close the tag php its Important
 ?>
