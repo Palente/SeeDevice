@@ -16,9 +16,7 @@ use pocketmine\network\mcpe\protocol\ServerSettingsResponsePacket;
 use pocketmine\utils\Config;
 #Eh meh c pas maintenant les Config NON
 class SeeDevice extends PluginBase implements Listener{
-#ah
-  
-}public static $logger = null;
+        public static $logger = null;
 	public static $instance;
 	
 	public function onLoad(){
