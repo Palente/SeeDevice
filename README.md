@@ -3,9 +3,9 @@ A pmmp plugin for Minecraft(W10,BE) [PHP]
 ## Some Informations
 This is a "api" plugin to get more easly user's Device<br>
 *Don't be afraid by opening a issue or a pull request*
-
+**An important lexical error have been resolved the API have Been Changed!!**
 **How to Get the device of an user with our plugin**<br>
-Just so easy: ``` $userDevice =SeeDevice::getInstance()->getUD($player);```<br>
+Just so easy: ``` $userDevice =SeeDevice::getInstance()->getUOS($player);```<br>
 And you get it but before doing that, just check if the plugin is enabled You have lot of possibility to call our fonction getUD<br>
 **LAST UPDATES**<br>
 Any..
