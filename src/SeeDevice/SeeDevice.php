@@ -99,4 +99,6 @@ public function translateVersion($fdp){
 }
 }
 #We close the tag php its Important
-?>
+#PMMP DONT LIKE TO CLOSE PHP why :(
+#Why :'(
+#?>
