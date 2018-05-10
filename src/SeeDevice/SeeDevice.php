@@ -22,6 +22,7 @@ class SeeDevice extends PluginBase implements Listener{
 	public function onLoad(){
 		self::$instance =$this;
     #Plus tard
+$this->getLogger()->info("NEW UPDATE: THE API CHANGED!!!");
 #$this->getServer()->getCommandMap()->register("bztamere", new CommandInFuture("waaay digi les bz",$this));
 }
 	public function onEnable(){
@@ -35,17 +36,24 @@ public static function getInstance(){
 public function onPacketReceived(DataPacketReceiveEvent $e){
     if($e->getPacket() instanceof \pocketmine\network\mcpe\protocol\LoginPacket){
       if($e->getPacket()->clientData["DeviceOS"] !== null){
-      	$this->device[$e->getPacket()->username]=$e->getPacket()->clientData["DeviceOS"];
+      	$this->os[$e->getPacket()->username]=$e->getPacket()->clientData["DeviceOS"];
+	$this->device[$e->getPacket()->username]=$e->getPacket()->clientData["DeviceModel"];
        }
 }
   }
 #La GROSSE FONCTION DE SES MORTS
-public function getUD(Player $player){
-  if(!isset($this->device[$player->getName()])) return 404;
+public function getUOS(Player $player){
+  if(!isset($this->os[$player->getName()])) return 404;
  #Lol on retourne 404 genre c une erreur Html...
-  if($this->device[$player->getName()] == null) return 404;
-  $digilespd = $this->device[$player->getName()];
+  if($this->os[$player->getName()] == null) return 404;
+  $digilespd = $this->os[$player->getName()];
   return $this->translateVersion($digilespd);
+}
+public function getUsD(Player $player){
+# When there is an error they will return 404
+  if(!isset($this->device[$player->getName()])) return 404;
+if($this->device[$player->getName()] == null) return 404;
+return $this->device[$player->getName()];
 }
 #Traduction des Versions oui car sa retourne un chiffre enft mek
 public function translateVersion($fdp){
