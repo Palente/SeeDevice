@@ -2,5 +2,5 @@ name: SeeDevice
 author: Palente
 version: 0.0.1.beta
 main: SeeDevice\SeeDevice
-api: [3.0.0-ALPHA11,3.0.0-ALPHA12]
+api: [3.0.0]
 description: "More easy to get Device of Player"
