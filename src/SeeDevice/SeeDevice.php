@@ -1,8 +1,6 @@
 <?php
 #c'est un bon début
-namespace SeeDevice;
-
-#use tamere/lasauvage
+namespace SeeDevice; 
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
@@ -11,24 +9,31 @@ use pocketmine\event\Listener;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\network\mcpe\protocol\ServerSettingsRequestPacket;
 use pocketmine\network\mcpe\protocol\ServerSettingsResponsePacket;
-#gngngngn ta oublyai les config
-#Bz ta mere
 use pocketmine\utils\Config;
-#Eh meh c pas maintenant les Config NON
+use SeeDevice\Commands\SD;
+use SeeDevice\Commands\FKSD;
+use SeeDevice\TheTask;
 class SeeDevice extends PluginBase implements Listener{
         public static $logger = null;
 	public static $instance;
 	
 	public function onLoad(){
 		self::$instance =$this;
-    #Plus tard
-$this->getLogger()->info("NEW UPDATE: THE API CHANGED!!!");
-#$this->getServer()->getCommandMap()->register("bztamere", new CommandInFuture("waaay digi les bz",$this));
+$this->getLogger()->info("New Update, Name changed the space in the name of the OS have been replaced by '_'");
+$this->getServer()->getCommandMap()->register("seedevice", new SD("seedevice",$this));
+$this->getServer()->getCommandMap()->register("fakeos", new FKSD("fakeos",$this));
 }
 	public function onEnable(){
-  #Config un jour
  #Pmmp dont want not useful message so Hey!
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
+    @mkdir($this->getDataFolder());
+  if(!file_exists($this->getDataFolder() . 'config.yml')) {
+    $this->saveResource('config.yml');
+  }
+  $config = new Config($this->getDataFolder().'config.yml',Config::YAML);
+  if($config->get("TaskName_Device") == "true"){
+    $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 11);
+  }
 }
 public static function getInstance(){
 	return self::$instance;
@@ -41,16 +46,16 @@ public function onPacketReceived(DataPacketReceiveEvent $e){
        }
 }
   }
-#La GROSSE FONCTION DE SES MORTS
-public function getUOS(Player $player){
+  #Get The device OS like Android
+public function getUos(Player $player){
   if(!isset($this->os[$player->getName()])) return 404;
- #Lol on retourne 404 genre c une erreur Html...
   if($this->os[$player->getName()] == null) return 404;
-  $digilespd = $this->os[$player->getName()];
-  return $this->translateVersion($digilespd);
+  $hirss = $this->os[$player->getName()];
+  #Now We can change the name of the os So we have to check if its an int
+  if(is_int($hirss)) return $this->translateVersion($hirss);
+  else return $hirss;
 }
-public function getUsD(Player $player){
-# When there is an error they will return 404
+public function getUsd(Player $player){
   if(!isset($this->device[$player->getName()])) return 404;
 if($this->device[$player->getName()] == null) return 404;
 return $this->device[$player->getName()];
@@ -62,43 +67,40 @@ public function translateVersion($fdp){
   $akha = "Android";
   break;
     case 2:
-  $akha = "IOS";#Ios not good...
+  $akha = "IOS";
   break;
     case 3:
-  $akha = "Mac";#Oh le fdp il a un mac eclater #FilsAPapa
+  $akha = "Mac"; 
   break;
     case 4:
   $akha = "FireOS"; #After forks of pmmp Forks of Android.. By Amazon
   break;
     case 5:
-  $akha = "GearVR";#Reality Virtuel fdp de Leader Price
+  $akha = "GearVR"; 
   break;
     case 6:
-  $akha = "Hololens";#Euh.... just search on google..
+  $akha = "Hololens";
   break;
     case 7:
-  $akha = "Windows 10";
+  $akha = "Windows_10";
   break;
     case 8:
-  $akha = "Windows 32, Educal version";
+  $akha = "Windows_32,Educal_version"; # Minecraft help people with learning programmation waaaaw waaaaw And?
   break;
     case 9:
-  $akha = "No name..";#If you have the Name of that
+  $akha = "NoName"; #If you have the Name of that send me a mp
   break;
     case 10:
-  $akha = "Playstation 4";
+  $akha = "Playstation_4";
   break;
     case 11:
-  $akha = "NX....";#NX no name...
+  $akha = "NX"; #NX no name... wollah c vrai
   break;
  
   default:
-  $akha = "Spoil casa de papel Moscou is dead.";
+  $akha = "Not_Registered!";
   break;
   }
+  return $akha;
 }
 }
-#We close the tag php its Important
-#PMMP DONT LIKE TO CLOSE PHP why :(
-#Why :'(
-#?>

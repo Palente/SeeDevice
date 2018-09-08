@@ -1,0 +1,4 @@
+version: "0.0.6"
+#--Don't change the version!
+TaskName_Device: "true"
+#if setted to false the task will not work
