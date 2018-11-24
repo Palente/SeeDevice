@@ -1,8 +1,8 @@
 name: SeeDevice
-version: "0.0.6"
+version: "0.0.7"
 author: Palente
 main: SeeDevice\SeeDevice
-description: "More easy to get Device of Player"
+description: "More easy to get the Device/OS of a Player"
 website: "https://github.com/Palente"
 api: 
   - "3.0.0"

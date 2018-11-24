@@ -9,7 +9,7 @@ use pocketmine\lang\TranslationContainer;
 class FKSD extends Command {
 	public static $pr = "§a[SeeDevice] §f";
 
-public function __construct(string $name, Plugin $callerapi){
+	public function __construct(string $name, Plugin $callerapi){
 		parent::__construct(
 			$name,
 			"Edit the device of a player",
@@ -19,11 +19,10 @@ public function __construct(string $name, Plugin $callerapi){
 	$this->setPermission("SeeDevice.command.fakeos");
 	$this->api = $callerapi;
 	}
-public function execute(CommandSender $sender, $command, array $args){
+	public function execute(CommandSender $sender, $command, array $args){
 		$usages = "/fakedevice <playername-self> <name_of_OS>";
 		if(!$this->testPermission($sender)){
-			
-			return $sender->sendMessage(self::$pr.new TranslationContainer("commands.generic.permission"));
+			return $sender->sendMessage(new TranslationContainer("commands.generic.permission"));
 		}
 		if(count($args) !=2){$sender->sendMessage(self::$pr."§4ERROR:§f You are using a bad usage of the command! Usage:".$usages);return false;}
 		if($args[0] == "self"){
@@ -37,8 +36,8 @@ public function execute(CommandSender $sender, $command, array $args){
 			if(!$pl instanceof Player){$sender->sendMessage(self::$pr."§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!"); return false;}
 			$os = $this->api->getUos($pl);
 			$this->api->os[$pl->getName()] = $args[1];
-			$sender->sendMessage(self::$pr."You have successfully changed your os name.\n§3Before: $os\n§7Now: ".$this->api->os[$pl->getName()]);
+			$sender->sendMessage(self::$pr."You have successfully changed your os name.\n§3Before: $os\n§7 Now: ".$this->api->os[$pl->getName()]);
 			return true;
 		}
-}
+	}
 }
