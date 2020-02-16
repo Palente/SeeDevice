@@ -1,28 +1,33 @@
 # SeeDevice
 A pmmp plugin for Minecraft(W10,BE) [PHP]
-## Some Informations
-This is a "api" plugin to get more easly user's Device<br>
-*Don't be afraid by opening a issue or a pull request*
-**An important lexical error have been resolved, so the API have Been Changed!!**
-**How to Get the device of an user with our plugin**<br>
-Just so easy: ``` $userDevice =SeeDevice::getInstance()->getUsd($player);```<br>
-And you get it but before doing that, just check if the plugin is enabled You have lot of possibility to call our fonction getUsD<br>
-**I want to get The OS of player**<br>
-Just do that: ```
-$userOs = SeeDevice::getInstance()->getUos($player);```
+[![](https://poggit.pmmp.io/shield.dl.total/SeeDevice)](https://poggit.pmmp.io/p/SeeDevice)
+## Some Information
+This is an "API" plugin to get more easily user's Device<br>
 
+### The Famous "API"
+*This is not really an API btw*<br>
+**How to Get the Os of a Player with SeeDevice**<br>
+It's easy: ``` $userOs =SeeDevice::getInstance()->getPlayerOs($player);```<br>
+**How to Get the Device of a Player with SeeDevice**<br>
+A bit more difficult than before: ```$userDevice = SeeDevice::getInstance()->getPlayerDevice($player);```
+*Be sure to have the class in your use statement and that Player is an instance of Player*<br>
+*Don't forget to check if the plugin is online*
 ## LAST UPDATES
-In the last update we have correct some error, and added 2 commands.
-We added the possibility to show the os of all player.(Can be disabled in config.yml)
-### Commands
-**How to see user's (device, os):** */seedevice [player]*
-**How to Edit user's os:** */fakeos <playername-self> <name_of_device>*
+**What happened in the last update?**<br>
+Nothing particular (*Lot of things*), just a remake of the plugin, because you and me, changed and it was the time to fix bugs.<br>
+You can Now customize the format of the Score Tag to show or not the Os and what do you want.<br>
+You can now disable the FakeOs Command..
+#### Commands
+**How to see user's (device, os):** */seedevice [player]*<br>
+**How to Edit user's os:** */fakeos <playername-self> <name_of_device>* (Only if it's enabled.)
 
-### Permission
-To have acces to the 2 command the player have to get the permission "SeeDevice.command.\*"
+#### Permission
+To have access to the two commands, the player has to get the permission "SeeDevice.command.\*"
 ## Future Release
 - [x] Create the Plugin<br>
 - [x] Do the Readme <br>
 - [x] Possibility to change the name of the OS<br>
-- [x] Create a command to get The Device Name of the user<br>
-- [ ] Config have more controls! Enable or Disable the command<br>
+- [x] Create a command to get the Device Name of the user<br>
+- [ ] Config has more control! Enable or Disable the command<br>
+- [ ] Get a serious list of Os <br>
+*Don't be afraid by opening an issue or a pull request*

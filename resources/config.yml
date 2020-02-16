@@ -1,4 +1,17 @@
-version: "0.0.7"
+version: "1.0.0"
 #--Don't change the version!
-TaskName_Device: "true"
-#if setted to false the task will not work
+
+Enable_ShowOsOverHead: "true"
+#if set to false the Os will not be shown over the Head
+#It's not the nametag it's under the nametag!
+
+OsOverHead_Format: "§f\n[§c%health%§f/%max_health%]\n§5%os%"
+#The format is loaded when the plugin got started
+#LIST OF TAGS FOR THE FORMAT
+# %health% -> represent health of the player eg: 20
+# %max_health% -> represent the maximum of health of the player
+# %os% -> represent the os of the player
+# \n -> skip a line.
+#
+Enable_FakeOs: true
+#if set to false the command /fakeos will not be available
