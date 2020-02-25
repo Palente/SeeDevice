@@ -31,20 +31,25 @@ class SeeDevice extends PluginBase implements Listener{
   private $os = [];
   private $device = [];
   public $fakeOsEnabled = true;
-  private $OOHFormat;
-  //SOOH mean OsOverHead
-
-
+  private $OOHFormat; //OOH mean OsOverHead
   /*The list of these OS are from Virvolta a well known ""developper"" on roblox.
-  Github: https://github.com/VirvoltaS
+  Github: https://github.com/Virvolta
   */
   private $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion","Dedicated", "PlayStation4", "Switch", "XboxOne"];
+
   public function onLoad(){
       self::$instance = $this;
       $this->getServer()->getCommandMap()->register("SeeDevice", new SD("seedevice",$this));
       $this->getServer()->getCommandMap()->register("SeeDevice", new FakeOs("fakeos",$this));
   }
+
+  /**
+   * getInstance
+   * @return static
+   */
   public static function getInstance() : self{
+      //Did you tried my well known plugin LuckyBlock?
+      //No? Try it now: https://poggit.pmmp.io/p/LuckyBlock
       return self::$instance;
   }
   public function onEnable(){
@@ -68,9 +73,10 @@ class SeeDevice extends PluginBase implements Listener{
   }
   public function onPacketReceived(DataPacketReceiveEvent $e){
       if($e->getPacket() instanceof LoginPacket){
+          //Is the line below useless?
           if($e->getPacket()->clientData["DeviceOS"] !== null){
-              $this->os[strtolower($e->getPacket()->username)??"unavailable"]=$e->getPacket()->clientData["DeviceOS"];
-              $this->device[strtolower($e->getPacket()->username)??"unavailable"]=$e->getPacket()->clientData["DeviceModel"];
+              $this->os[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceOS"];
+              $this->device[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceModel"];
           }
       }
   }
@@ -82,8 +88,9 @@ class SeeDevice extends PluginBase implements Listener{
    *
    */
     public function getPlayerOs(Player $player) : ?string{
-        if(!isset($this->os[$player->getName()]) OR $this->os[$player->getName()] == null) return null;
-        return $this->listOfOs[$this->os[strtolower($player->getName())]];
+        $name = strtolower($player->getName());
+        if(!isset($this->os[$name]) OR $this->os[$name] == null) return null;
+        return $this->listOfOs[$this->os[$name]];
     }
     /**
      * @param Player $player
@@ -91,10 +98,10 @@ class SeeDevice extends PluginBase implements Listener{
      * Get The Device of the Player
      */
     public function getPlayerDevice(Player $player) : ?string{
-        if(!isset($this->device[$player->getName()]) OR $this->device[$player->getName()] == null) return null;
-        return $this->device[$player->getName()];
+        $name = strtolower($player->getName());
+        if(!isset($this->device[$name]) OR $this->device[$name] == null) return null;
+        return $this->device[$name];
     }
-
     /**
      * @param Player $player
      * @param string $os
@@ -104,9 +111,9 @@ class SeeDevice extends PluginBase implements Listener{
         //DISCOURAGED METHOD
         $this->os[strtolower($player->getName())] = $os;
     }
-
     /**
      * @return mixed
+     * Get The Format of the OsOverHead
      */
     public function getOOHFormat()
     {
