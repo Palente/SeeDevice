@@ -14,7 +14,8 @@ A bit more difficult than before: ```$userDevice = SeeDevice::getInstance()->get
 *Don't forget to check if the plugin is online*
 ## LAST UPDATES
 **What happened in the last update?**<br>
-Nothing particular (*Lot of things*), just a remake of the plugin, because you and me, changed and it was the time to fix bugs.<br>
+*(1.1.0)* Now all Commands can be managed(2 commands). You can now See the Real Device of the player from /seedevice.<br>
+*(1.0.0)* Nothing particular (*Lot of things*), just a remake of the plugin, because you and me, changed and it was the time to fix bugs.<br>
 You can Now customize the format of the Score Tag to show or not the Os and what do you want.<br>
 You can now disable the FakeOs Command..
 #### Commands
@@ -28,6 +29,7 @@ To have access to the two commands, the player has to get the permission "SeeDev
 - [x] Do the Readme <br>
 - [x] Possibility to change the name of the OS<br>
 - [x] Create a command to get the Device Name of the user<br>
-- [ ] Config has more control! Enable or Disable the command<br>
+- [x] Config has more control! Enable or Disable the command<br>
 - [ ] Get a serious list of Os <br>
+- [ ] Re-Make the Config <br>
 *Don't be afraid by opening an issue or a pull request*

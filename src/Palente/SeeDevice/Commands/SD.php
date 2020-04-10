@@ -23,6 +23,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\Player;
 class SD extends Command {
     private $plugin;
+    private $format;
     public function __construct(string $name, SeeDevice $caller){
         parent::__construct(
             $name,
@@ -32,37 +33,45 @@ class SD extends Command {
             );
         $this->setPermission("SeeDevice.command.sd");
         $this->plugin = $caller;
+        $this->format = $caller->getSDCFormat();
     }
     public function execute(CommandSender $sender, $command, array $args){
-        $usage = $this->getUsage();
         $pr = SeeDevice::$prefix;
         if(!$this->testPermission($sender))return;
+        if(!$this->plugin->seeDeviceCommandEnabled)return;
         if(count($args) == 0){
+            //Why does a console want to see his device.
             if(!$sender instanceof Player) return;
-            //he want to see his own data
             if(!$this->plugin->getPlayerOs($sender) OR !$this->plugin->getPlayerDevice($sender)){
-                $sender->sendMessage($pr."§4 An Error has occured, please try again later..");
+                $sender->sendMessage($pr."§4What Happened, i can't get your OS! try again later! ");
                 return;
             }
-            $nm = $sender->getName();
-            $os = $this->plugin->getPlayerOs($sender);
-            $dv = $this->plugin->getPlayerDevice($sender);
-            $ip = $sender->getAddress();
-            $sender->sendMessage($pr."§e::INFORMATIONS::\n§6Player's Name: $nm\n§5Player's OS: $os\n§dPlayer's Device: $dv\n§2Player's IP: $ip");
+            $sender->sendMessage($pr.$this->replaceFormat($sender));
             return;
         }else{
             $pl = $this->plugin->getServer()->getPlayer($args[0]);
             if(!$pl instanceof Player){$sender->sendMessage($pr."§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!"); return;}
             if(!$this->plugin->getPlayerOs($pl) OR !$this->plugin->getPlayerDevice($pl)){
-                $sender->sendMessage($pr."§4An Error has occured, please try again later..");
+                $sender->sendMessage($pr."This player has some problem with SeeDevice, try again later!");
                 return;
             }
-            $nm = $pl->getName();
-            $os = $this->plugin->getPlayerOs($pl);
-            $dv = $this->plugin->getPlayerDevice($pl);
-            $ip = $pl->getAddress();
-            $sender->sendMessage($pr."§eINFORMATIONS\n§6Player's Name: $nm\n§5Player's OS: $os\n§dPlayer's Device: $dv\n§2Player's IP: $ip");
+            $sender->sendMessage($pr.$this->replaceFormat($pl));
             return;
         }
+    }
+
+    /**
+     * @param Player $player
+     * @return string
+     * replace the tags with real text! (Magic function)
+     */
+    private function replaceFormat(Player $player) : string{
+        $format = $this->format;
+        $format = str_replace("%name%", $player->getName(), $format);
+        $format = str_replace("%os%", $this->plugin->getPlayerOs($player) , $format);
+        $format = str_replace("%fakeos%", $this->plugin->getFakeOs($player), $format);
+        $format = str_replace("%device%", $this->plugin->getPlayerDevice($player), $format);
+        $format = str_replace("%ip%", $player->getAddress(), $format);
+        return $format;
     }
 }

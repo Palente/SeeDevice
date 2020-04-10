@@ -36,11 +36,15 @@ class TheTask extends Task{
 		}
 	}
 
-	private function replaceFormat(Player $player) : string{
+    /**
+     * @param Player $player
+     * @return string
+     */
+    private function replaceFormat(Player $player) : string{
 	    $format = $this->format;
         $format = str_replace("%health%", round($player->getHealth()), $format);
         $format = str_replace("%max_health%", $player->getMaxHealth(), $format);
-        $format = str_replace("%os%", $this->plugin->getPlayerOs($player) , $format);
+        $format = str_replace("%os%", (is_null($this->plugin->getFakeOs($player))?$this->plugin->getPlayerOs($player): $this->plugin->getFakeOs($player)) , $format);
         return $format;
     }
 }

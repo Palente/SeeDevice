@@ -26,67 +26,77 @@ use pocketmine\utils\Config;
 use Palente\SeeDevice\Commands\SD;
 use Palente\SeeDevice\Commands\FakeOs;
 class SeeDevice extends PluginBase implements Listener{
-  public static $instance;
-  public static $prefix = "§a[SeeDevice] §f";
-  private $os = [];
-  private $device = [];
-  public $fakeOsEnabled = true;
-  private $OOHFormat; //OOH mean OsOverHead
-  /*The list of these OS are from Virvolta a well known ""developper"" on roblox.
-  Github: https://github.com/Virvolta
-  */
-  private $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion","Dedicated", "PlayStation4", "Switch", "XboxOne"];
+    public static $instance;
+    public static $prefix = "§a[SeeDevice] §f";
+    private $os = [];
+    private $fakeOs = [];
+    private $device = [];
+    public $fakeOsEnabled = true;
+    public $seeDeviceCommandEnabled = true;
+    private $formatSDCommand = ""; //Format SeeDevice Command
+    private $OOHFormat = ""; //OOH mean OsOverHead
+    /*The list of these OS are from Virvolta a well known ""developper"" on roblox.
+    Github: https://github.com/Virvolta
+    He has a minecraft bedrock edition server, try it! https://discord.gg/Xm8PUKb
+    */
+    private $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion","Dedicated", "PlayStation4", "Switch", "XboxOne"];
+    public function onLoad(){
+        self::$instance = $this;
+        $this->getServer()->getCommandMap()->register("SeeDevice", new SD("seedevice",$this));
+        $this->getServer()->getCommandMap()->register("SeeDevice", new FakeOs("fakeos",$this));
+    }
 
-  public function onLoad(){
-      self::$instance = $this;
-      $this->getServer()->getCommandMap()->register("SeeDevice", new SD("seedevice",$this));
-      $this->getServer()->getCommandMap()->register("SeeDevice", new FakeOs("fakeos",$this));
-  }
-
-  /**
-   * getInstance
-   * @return static
-   */
-  public static function getInstance() : self{
+    /**
+    * getInstance
+    * @return static
+    */
+    public static function getInstance() : self{
       //Did you tried my well known plugin LuckyBlock?
       //No? Try it now: https://poggit.pmmp.io/p/LuckyBlock
-      return self::$instance;
-  }
-  public function onEnable(){
-      #PocketMine-MP doesn't allow me to send useless message so, Hey you!
-      $this->getServer()->getPluginManager()->registerEvents($this, $this);
-      @mkdir($this->getDataFolder());
-      if(!file_exists($this->getDataFolder() . 'config.yml')) $this->saveResource('config.yml');
-      $config = new Config($this->getDataFolder().'config.yml',Config::YAML);
-      if($config->get("Enable_ShowOsOverHead",true) == "true") {
-          $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
-          $this->getLogger()->info("[OsOverHead] is enabled!");
-          $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 11);
-      }else $this->getLogger()->info("[OsOverHead] is not enabled!");
-      if($config->get("Enable_FakeOs",true) == "true") {
-          $this->fakeOsEnabled = true;
-          $this->getLogger()->info("[Command] The Command FakeOs is enabled.");
-      } else {
-          $this->fakeOsEnabled = false;
-          $this->getLogger()->info("[Command] The Command FakeOs is disabled! To enable it set 'Enable_FakeOs' to true in config.yml");
-      }
-  }
-  public function onPacketReceived(DataPacketReceiveEvent $e){
-      if($e->getPacket() instanceof LoginPacket){
-          //Is the line below useless?
-          if($e->getPacket()->clientData["DeviceOS"] !== null){
-              $this->os[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceOS"];
-              $this->device[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceModel"];
-          }
-      }
-  }
-
-  /**
-   * @param Player $player
-   * @return String|null
-   * Get the OS of the Player
-   *
-   */
+        return self::$instance;
+    }
+    public function onEnable(){
+          #PocketMine-MP doesn't allow me to send useless message so, Hey you!
+        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        @mkdir($this->getDataFolder());
+        if(!file_exists($this->getDataFolder() . 'config.yml')) $this->saveResource('config.yml');
+        $config = new Config($this->getDataFolder().'config.yml',Config::YAML);
+        if($config->get("Enable_ShowOsOverHead",true) == "true") {
+            $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
+            $this->getLogger()->info("[OsOverHead] is enabled!");
+            $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 11);
+        }else $this->getLogger()->info("[OsOverHead] is not enabled!");
+        if($config->get("Enable_FakeOs",true) == "true") {
+            $this->fakeOsEnabled = true;
+            $this->getLogger()->info("[Command] The Command FakeOs is enabled.");
+        } else {
+            $this->fakeOsEnabled = false;
+            $this->getLogger()->info("[Command] The Command FakeOs is disabled! To enable it set 'Enable_FakeOs' to true in config.yml");
+        }
+        if($config->get("Enable_SeeDeviceCommand",true) == "true") {
+            $this->seeDeviceCommandEnabled = true;
+            $this->formatSDCommand = $config->get("SeeDeviceCommand_Format", "");
+            $this->getLogger()->info("[Command] The Command SeeDevice is enabled.");
+        } else {
+            $this->seeDeviceCommandEnabled = false;
+            $this->getLogger()->info("[Command] The Command SeeDevice is disabled! To enable it set 'Enable_SeeDeviceCommand' to true in config.yml");
+        }
+    }
+    public function onPacketReceived(DataPacketReceiveEvent $e){
+        if($e->getPacket() instanceof LoginPacket){
+            //Is the line below useless?
+            if($e->getPacket()->clientData["DeviceOS"] !== null){
+                $this->os[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceOS"];
+                $this->device[strtolower($e->getPacket()->username) ?? "unavailable"] = $e->getPacket()->clientData["DeviceModel"];
+            }
+        }
+    }
+    /**
+    * @param Player $player
+    * @return String|null
+    * Get the OS of the Player
+    *
+    */
     public function getPlayerOs(Player $player) : ?string{
         $name = strtolower($player->getName());
         if(!isset($this->os[$name]) OR $this->os[$name] == null) return null;
@@ -112,11 +122,48 @@ class SeeDevice extends PluginBase implements Listener{
         $this->os[strtolower($player->getName())] = $os;
     }
     /**
-     * @return mixed
+     * @return string
      * Get The Format of the OsOverHead
      */
-    public function getOOHFormat()
+    public function getOOHFormat(): string
     {
         return $this->OOHFormat;
+    }
+
+    /**
+     * @return string
+     * Get The Format of the SeeDevice Command
+     */
+    public function getSDCFormat() : string{
+        return $this->formatSDCommand;
+    }
+
+    /**
+     * @param Player $player
+     * @return string
+     * Get The FakeOs of a player
+     */
+    public function getFakeOs(Player $player) : ?string{
+        return $this->fakeOs[strtolower($player->getName())] ?? null;
+    }
+
+    /**
+     * @param Player $player
+     * @param string $fakeOs
+     * @return bool
+     * Set The FakeOs of a player
+     */
+    public function setFakeOs(Player $player, string $fakeOs) : bool{
+        if($fakeOs == "") return false;
+        $this->fakeOs[strtolower($player->getName())] = $fakeOs;
+        return true;
+    }
+
+    /**
+     * @param Player $player
+     * Remove The FakeOs
+     */
+    public function removeFakeOs(Player $player){
+        unset($this->fakeOs[strtolower($player->getName())]);
     }
 }

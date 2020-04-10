@@ -10,8 +10,21 @@ OsOverHead_Format: "§f\n[§c%health%§f/%max_health%]\n§5%os%"
 #LIST OF TAGS FOR THE FORMAT
 # %health% -> represent health of the player eg: 20
 # %max_health% -> represent the maximum of health of the player
-# %os% -> represent the os of the player
+# %os% -> represent the os name of the player
 # \n -> skip a line.
-#
+
 Enable_FakeOs: true
 #if set to false the command /fakeos will be disabled
+
+Enable_SeeDeviceCommand: true
+#if set to false the command /seedevice will be disabled
+
+SeeDeviceCommand_Format: "§eINFORMATIONS\n§6Player's Name: %name%\n§5Player's OS: %os%\n§dPlayer's Device: %device%\n§2Player's IP: $ip"
+#The format is loaded when the plugin got started
+#LIST OF TAGS FOR THIS FORMAT
+# %name% -> represent the Name of the Player
+# %os% -> represent the OS Name of the Player
+# %fakeos% -> if the player has a fake os it will give the fake os if not it will give null
+# %device% -> Represent the Device Name of the Player
+# %ip% -> Represent the IP of the Player
+# \n -> skip a line.
