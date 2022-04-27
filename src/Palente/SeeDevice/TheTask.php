@@ -37,7 +37,6 @@ class TheTask extends Task
     public function onRun(): void
     {
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-            $player->setNameTagVisible();
             $format = $this->replaceFormat($player);
             $player->setScoreTag($format);
         }
