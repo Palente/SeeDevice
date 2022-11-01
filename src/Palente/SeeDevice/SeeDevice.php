@@ -29,7 +29,7 @@ use Palente\SeeDevice\Commands\FakeOs;
 
 class SeeDevice extends PluginBase implements Listener
 {
-    public static SeeDevice $instance;
+    public static self $instance;
     public static string $prefix = "§a[SeeDevice] §f";
     public bool $fakeOsEnabled = true;
     public bool $seeDeviceCommandEnabled = true;
@@ -66,7 +66,9 @@ class SeeDevice extends PluginBase implements Listener
             $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
             $this->getLogger()->info("[OsOverHead] is enabled!");
             $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 20);
-        } else $this->getLogger()->info("[OsOverHead] is not enabled!");
+        } else {
+            $this->getLogger()->info("[OsOverHead] is not enabled!");
+        }
         if ($config->get("Enable_FakeOs", true) === "true") {
             $this->fakeOsEnabled = true;
             $this->getLogger()->info("[Command] The Command FakeOs is enabled.");
@@ -88,9 +90,13 @@ class SeeDevice extends PluginBase implements Listener
     {
         $player = $event->getPlayer();
         $data = $player->getPlayerInfo()->getExtraData();
-        if ($data["DeviceOS"] !== null) $this->os[strtolower($player->getName()) ?? "Unknown"] = $data["DeviceOS"];
-        if ($data["DeviceModel"] !== null) $this->device[strtolower($player->getName()) ?? "Unknown"] = $data["DeviceModel"];
-    }
+        if ($data["DeviceOS"] !== null) {
+            $this->os[$player->getName()] = $data["DeviceOS"];
+        }
+        if ($data["DeviceModel"] !== null) {
+            $this->device[$player->getName()] = $data["DeviceModel"];
+        }
+     }
 
     /**
      * @param Player $player
@@ -100,7 +106,9 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function getPlayerOs(Player $player): ?string
     {
-        if (!isset($this->os[$player->getName()]) or $this->os[$player->getName()] === null) return null;
+        if (!isset($this->os[$player->getName()]) || $this->os[$player->getName()] === null) {
+            return null;
+        }
         return $this->listOfOs[$this->os[strtolower($player->getName())]] ?? null;
     }
 
@@ -112,7 +120,9 @@ class SeeDevice extends PluginBase implements Listener
     public function getPlayerDevice(Player $player): ?string
     {
         $name = strtolower($player->getName());
-        if (!isset($this->device[$name]) or $this->device[$name] === null) return null;
+        if (!isset($this->device[$name]) || $this->device[$name] === null) {
+            return null;
+        }
         return $this->device[$name];
     }
 
@@ -163,7 +173,9 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function setFakeOs(Player $player, string $fakeOs): bool
     {
-        if ($fakeOs === "") return false;
+        if ($fakeOs === "") {
+            return false;
+        }
         $this->fakeOs[strtolower($player->getName())] = $fakeOs;
         return true;
     }
