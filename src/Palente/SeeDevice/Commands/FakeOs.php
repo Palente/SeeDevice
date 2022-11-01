@@ -26,6 +26,7 @@ use pocketmine\player\Player;
 
 class FakeOs extends Command
 {
+    /** @var SeeDevice */
     private SeeDevice $plugin;
 
     public function __construct(string $name, SeeDevice $caller)
@@ -36,27 +37,27 @@ class FakeOs extends Command
             "/fakeos <player-self> <OS>",
             ["fkos"]
         );
-        $this->setPermission("SeeDevice.command.fakeos");
+        $this->setPermission("SeeDevice.fakeos");
         $this->plugin = $caller;
     }
 
-    public function execute(CommandSender $sender, $command, array $args)
+    public function execute(CommandSender $sender, $command, array $args): void
     {
         $usages = $this->getUsage();
         $pr = SeeDevice::$prefix;
         if (!$this->plugin->fakeOsEnabled) return;
         if (!$this->testPermission($sender)) return;
-        if (count($args) != 2) {
+        if (count($args) !== 2) {
             $sender->sendMessage($pr . "§4ERROR:§f Bad Usage of the Command! Usage:" . $usages);
             return;
         }
-        if ($args[0] == "self") {
+        if ($args[0] === "self") {
             if (!$sender instanceof Player) {
                 $sender->sendMessage($pr . "§4ERROR:§f Well, you no longer want to be a machine, i can't help you!");
                 return;
             }
             $fakeOs = implode(" ", array_slice($args, 1));
-            if ($fakeOs == "") {
+            if ($fakeOs === "") {
                 $this->plugin->removeFakeOs($sender);
                 $sender->sendMessage($pr . "You have successfully removed your fake Os Name!");
                 return;
@@ -71,7 +72,7 @@ class FakeOs extends Command
                 return;
             }
             $fakeOs = implode(" ", array_slice($args, 1));
-            if ($fakeOs == "") {
+            if ($fakeOs === "") {
                 $this->plugin->removeFakeOs($pl);
                 $sender->sendMessage($pr . "You have successfully removed {$pl->getName()}'s fake Os Name!");
                 return;
