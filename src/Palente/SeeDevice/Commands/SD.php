@@ -26,7 +26,9 @@ use pocketmine\player\Player;
 
 class SD extends Command
 {
+    /** @var SeeDevice */
     private SeeDevice $plugin;
+    /** @var string */
     private string $format;
 
     public function __construct(string $name, SeeDevice $caller)
@@ -42,14 +44,14 @@ class SD extends Command
         $this->format = $caller->getSDCFormat();
     }
 
-    public function execute(CommandSender $sender, $command, array $args)
+    public function execute(CommandSender $sender, $command, array $args): void
     {
         $pr = SeeDevice::$prefix;
         if (!$this->testPermission($sender)) return;
         if (!$this->plugin->seeDeviceCommandEnabled) return;
-        if (count($args) == 0) {
+        if (count($args) === 0) {
             if (!$sender instanceof Player) return;
-            if (!$this->plugin->getPlayerOs($sender) or !$this->plugin->getPlayerDevice($sender)) {
+            if (!$this->plugin->getPlayerOs($sender) || !$this->plugin->getPlayerDevice($sender)) {
                 $sender->sendMessage($pr . "§4What Happened, i can't get your OS! try again later! ");
                 return;
             }
