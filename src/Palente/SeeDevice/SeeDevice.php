@@ -109,7 +109,7 @@ class SeeDevice extends PluginBase implements Listener
         if (!isset($this->os[$player->getName()]) || $this->os[$player->getName()] === null) {
             return null;
         }
-        return $this->listOfOs[$this->os[strtolower($player->getName())]] ?? null;
+        return $this->listOfOs[$this->os[$player->getName()];
     }
 
     /**
@@ -119,11 +119,10 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function getPlayerDevice(Player $player): ?string
     {
-        $name = strtolower($player->getName());
-        if (!isset($this->device[$name]) || $this->device[$name] === null) {
+        if (!isset($this->device[$player->getName()]) || $this->device[$player->getName()] === null) {
             return null;
         }
-        return $this->device[$name];
+        return $this->device[$player->getName()];
     }
 
     /**
@@ -162,7 +161,7 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function getFakeOs(Player $player): ?string
     {
-        return $this->fakeOs[strtolower($player->getName())] ?? null;
+        return $this->fakeOs[$player->getName()] ?? null;
     }
 
     /**
@@ -176,7 +175,7 @@ class SeeDevice extends PluginBase implements Listener
         if ($fakeOs === "") {
             return false;
         }
-        $this->fakeOs[strtolower($player->getName())] = $fakeOs;
+        $this->fakeOs[$player->getName()] = $fakeOs;
         return true;
     }
 
@@ -186,6 +185,6 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function removeFakeOs(Player $player)
     {
-        unset($this->fakeOs[strtolower($player->getName())]);
+        unset($this->fakeOs[$player->getName()]);
     }
 }
