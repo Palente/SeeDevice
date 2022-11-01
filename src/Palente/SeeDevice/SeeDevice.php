@@ -109,7 +109,7 @@ class SeeDevice extends PluginBase implements Listener
         if (!isset($this->os[$player->getName()]) || $this->os[$player->getName()] === null) {
             return null;
         }
-        return $this->listOfOs[$this->os[$player->getName()];
+        return $this->listOfOs[$this->os[$player->getName()]];
     }
 
     /**
@@ -133,7 +133,7 @@ class SeeDevice extends PluginBase implements Listener
     public function setPlayerOs(Player $player, string $os)
     {
         //DISCOURAGED METHOD
-        $this->os[strtolower($player->getName())] = $os;
+        $this->os[$player->getName()] = $os;
     }
 
     /**
