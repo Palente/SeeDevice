@@ -29,7 +29,7 @@ use Palente\SeeDevice\Commands\FakeOs;
 
 class SeeDevice extends PluginBase implements Listener
 {
-    public static self $instance;
+    private static self $instance;
     public static string $prefix = "§a[SeeDevice] §f";
     public bool $fakeOsEnabled = true;
     public bool $seeDeviceCommandEnabled = true;
@@ -40,10 +40,6 @@ class SeeDevice extends PluginBase implements Listener
     private string $OOHFormat = ""; //OOH mean OsOverHead
     private array $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion", "Dedicated", "PlayStation4", "Switch", "XboxOne"];
 
-    /**
-     * getInstance
-     * @return static
-     */
     public static function getInstance(): self
     {
         return self::$instance;
