@@ -37,7 +37,7 @@ class SD extends Command
             "/seedevice [player]",
             ["sd"]
         );
-        $this->setPermission("SeeDevice.command.sd");
+        $this->setPermission("SeeDevice.seedevice");
         $this->plugin = $caller;
         $this->format = $caller->getSDCFormat();
     }
