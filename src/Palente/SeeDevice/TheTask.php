@@ -25,7 +25,9 @@ use pocketmine\scheduler\Task;
 
 class TheTask extends Task
 {
+    /** @var SeeDevice */
     private SeeDevice $plugin;
+    /** @var string */
     private string $format;
 
     public function __construct(SeeDevice $caller)
