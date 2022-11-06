@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SeeDevice is a plugin working under the software pmmp
  *  Copyright (C) 2020  Palente
@@ -41,12 +42,16 @@ class FakeOs extends Command
         $this->plugin = $caller;
     }
 
-    public function execute(CommandSender $sender, $command, array $args): void
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
         $usages = $this->getUsage();
         $pr = SeeDevice::$prefix;
-        if (!$this->plugin->fakeOsEnabled) return;
-        if (!$this->testPermission($sender)) return;
+        if (!$this->plugin->fakeOsEnabled) {
+            return;
+        }
+        if (!$this->testPermission($sender)) {
+            return;
+        }
         if (count($args) !== 2) {
             $sender->sendMessage($pr . "§4ERROR:§f Bad Usage of the Command! Usage:" . $usages);
             return;

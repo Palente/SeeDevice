@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SeeDevice is a plugin working under the software pmmp
  *  Copyright (C) 2020  Palente
@@ -19,28 +20,41 @@
 
 namespace Palente\SeeDevice;
 
+use Palente\SeeDevice\Commands\FakeOs;
+use Palente\SeeDevice\Commands\SD;
+use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
-use pocketmine\event\Listener;
 use pocketmine\utils\Config;
-use Palente\SeeDevice\Commands\SD;
-use Palente\SeeDevice\Commands\FakeOs;
 
 class SeeDevice extends PluginBase implements Listener
 {
-    private static self $instance;
+    /** @var string */
     public static string $prefix = "§a[SeeDevice] §f";
+    /** @var self|null */
+    private static ?self $instance;
+    /** @var bool */
     public bool $fakeOsEnabled = true;
+    /** @var bool */
     public bool $seeDeviceCommandEnabled = true;
+    /** @var array */
     private array $os = [];
+    /** @var array */
     private array $fakeOs = [];
+    /** @var array */
     private array $device = [];
+    /** @var string */
     private string $formatSDCommand = ""; //Format SeeDevice Command
-    private string $OOHFormat = ""; //OOH mean OsOverHead
+    /** @var string */
+    private string $OOHFormat = ""; //OOH, mean OsOverHead
+    /** @var array<string> */
     private array $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion", "Dedicated", "PlayStation4", "Switch", "XboxOne"];
 
-    public static function getInstance(): self
+    /**
+     * @return static|null
+     */
+    public static function getInstance(): ?self
     {
         return self::$instance;
     }
@@ -56,7 +70,9 @@ class SeeDevice extends PluginBase implements Listener
     {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         @mkdir($this->getDataFolder());
-        if (!file_exists($this->getDataFolder() . 'config.yml')) $this->saveResource('config.yml');
+        if (!file_exists($this->getDataFolder() . 'config.yml')) {
+            $this->saveResource('config.yml');
+        }
         $config = new Config($this->getDataFolder() . 'config.yml', Config::YAML);
         if ($config->get("Enable_ShowOsOverHead", true) === "true") {
             $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
@@ -72,7 +88,7 @@ class SeeDevice extends PluginBase implements Listener
             $this->fakeOsEnabled = false;
             $this->getLogger()->info("[Command] The Command FakeOs is disabled! To enable it set 'Enable_FakeOs' to true in config.yml");
         }
-        if ($config->get("Enable_SeeDeviceCommand", true) == "true") {
+        if ($config->get("Enable_SeeDeviceCommand", true) === "true") {
             $this->seeDeviceCommandEnabled = true;
             $this->formatSDCommand = $config->get("SeeDeviceCommand_Format", "");
             $this->getLogger()->info("[Command] The Command SeeDevice is enabled.");
@@ -82,7 +98,11 @@ class SeeDevice extends PluginBase implements Listener
         }
     }
 
-    public function onPlayerLogin(PlayerLoginEvent $event)
+    /**
+     * @param PlayerLoginEvent $event
+     * @return void
+     */
+    public function onPlayerLogin(PlayerLoginEvent $event): void
     {
         $player = $event->getPlayer();
         $data = $player->getPlayerInfo()->getExtraData();
@@ -92,13 +112,12 @@ class SeeDevice extends PluginBase implements Listener
         if ($data["DeviceModel"] !== null) {
             $this->device[$player->getName()] = $data["DeviceModel"];
         }
-     }
+    }
 
     /**
      * @param Player $player
      * @return String|null
      * Get the OS of the Player
-     *
      */
     public function getPlayerOs(Player $player): ?string
     {
@@ -126,7 +145,7 @@ class SeeDevice extends PluginBase implements Listener
      * @param string $os
      * Set the Os of the player.
      */
-    public function setPlayerOs(Player $player, string $os)
+    public function setPlayerOs(Player $player, string $os): void
     {
         //DISCOURAGED METHOD
         $this->os[$player->getName()] = $os;
@@ -179,7 +198,7 @@ class SeeDevice extends PluginBase implements Listener
      * @param Player $player
      * Remove The FakeOs
      */
-    public function removeFakeOs(Player $player)
+    public function removeFakeOs(Player $player): void
     {
         unset($this->fakeOs[$player->getName()]);
     }

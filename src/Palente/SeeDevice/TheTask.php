@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SeeDevice is a plugin working under the software pmmp
  *  Copyright (C) 2020  Palente
@@ -20,8 +21,8 @@
 namespace Palente\SeeDevice;
 
 use pocketmine\player\Player;
-use pocketmine\Server;
 use pocketmine\scheduler\Task;
+use pocketmine\Server;
 
 class TheTask extends Task
 {
@@ -51,9 +52,6 @@ class TheTask extends Task
     private function replaceFormat(Player $player): string
     {
         $format = $this->format;
-        $format = str_replace("%health%", round($player->getHealth()), $format);
-        $format = str_replace("%max_health%", $player->getMaxHealth(), $format);
-        $format = str_replace("%os%", (is_null($this->plugin->getFakeOs($player)) ? $this->plugin->getPlayerOs($player) : $this->plugin->getFakeOs($player)), $format);
-        return $format;
+        return str_replace(array("%health%", "%max_health%", "%os%"), array(round($player->getHealth()), $player->getMaxHealth(), (is_null($this->plugin->getFakeOs($player)) ? $this->plugin->getPlayerOs($player) : $this->plugin->getFakeOs($player))), $format);
     }
 }
