@@ -1,7 +1,7 @@
 version: "1.0.0"
 #--Don't change the version!
 
-Enable_ShowOsOverHead: "true"
+Enable_ShowOsOverHead: true
 #if set to false the Os will not be shown over the Head
 #It's not the nametag it's under the nametag!
 

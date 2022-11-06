@@ -74,21 +74,21 @@ class SeeDevice extends PluginBase implements Listener
             $this->saveResource('config.yml');
         }
         $config = new Config($this->getDataFolder() . 'config.yml', Config::YAML);
-        if ($config->get("Enable_ShowOsOverHead", true) === "true") {
+        if ($config->get("Enable_ShowOsOverHead", true) === true) {
             $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
             $this->getLogger()->info("[OsOverHead] is enabled!");
             $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 20);
         } else {
             $this->getLogger()->info("[OsOverHead] is not enabled!");
         }
-        if ($config->get("Enable_FakeOs", true) === "true") {
+        if ($config->get("Enable_FakeOs", true) === true) {
             $this->fakeOsEnabled = true;
             $this->getLogger()->info("[Command] The Command FakeOs is enabled.");
         } else {
             $this->fakeOsEnabled = false;
             $this->getLogger()->info("[Command] The Command FakeOs is disabled! To enable it set 'Enable_FakeOs' to true in config.yml");
         }
-        if ($config->get("Enable_SeeDeviceCommand", true) === "true") {
+        if ($config->get("Enable_SeeDeviceCommand", true) === true) {
             $this->seeDeviceCommandEnabled = true;
             $this->formatSDCommand = $config->get("SeeDeviceCommand_Format", "");
             $this->getLogger()->info("[Command] The Command SeeDevice is enabled.");
