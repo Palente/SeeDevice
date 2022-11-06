@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SeeDevice is a plugin working under the software pmmp
  *  Copyright (C) 2020  Palente
@@ -16,35 +17,37 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Palente\SeeDevice;
-use pocketmine\Player;
-use pocketmine\Server;
-use pocketmine\scheduler\Task;
-class TheTask extends Task{
-    private $plugin;
-    private $format;
-	public function __construct(SeeDevice $caller){
-		$this->plugin = $caller;
-		$this->format = $this->plugin->getOOHFormat();
-	}
 
-	public function onRun($currentTick){
-		foreach(Server::getInstance()->getOnlinePlayers() as $player){
-			$player->setNameTagVisible();
-			$format = $this->replaceFormat($player);
-			$player->setScoreTag($format);
-		}
-	}
+namespace Palente\SeeDevice;
+
+use pocketmine\player\Player;
+use pocketmine\scheduler\Task;
+use pocketmine\Server;
+
+class TheTask extends Task
+{
+    /** @var SeeDevice */
+    private SeeDevice $plugin;
+
+    public function __construct(SeeDevice $caller)
+    {
+        $this->plugin = $caller;
+    }
+
+    public function onRun(): void
+    {
+        foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+            $format = $this->replaceFormat($player);
+            $player->setScoreTag($format);
+        }
+    }
 
     /**
      * @param Player $player
      * @return string
      */
-    private function replaceFormat(Player $player) : string{
-	    $format = $this->format;
-        $format = str_replace("%health%", round($player->getHealth()), $format);
-        $format = str_replace("%max_health%", $player->getMaxHealth(), $format);
-        $format = str_replace("%os%", (is_null($this->plugin->getFakeOs($player))?$this->plugin->getPlayerOs($player): $this->plugin->getFakeOs($player)) , $format);
-        return $format;
+    private function replaceFormat(Player $player): string
+    {
+        return str_replace(array("%health%", "%max_health%", "%os%"), array(round($player->getHealth()), $player->getMaxHealth(), (is_null($this->plugin->getFakeOs($player)) ? $this->plugin->getPlayerOs($player) : $this->plugin->getFakeOs($player))), $this->plugin->getOOHFormat());
     }
 }

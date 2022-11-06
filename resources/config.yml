@@ -1,7 +1,7 @@
 version: "1.0.0"
 #--Don't change the version!
 
-Enable_ShowOsOverHead: "true"
+Enable_ShowOsOverHead: true
 #if set to false the Os will not be shown over the Head
 #It's not the nametag it's under the nametag!
 
@@ -19,7 +19,7 @@ Enable_FakeOs: true
 Enable_SeeDeviceCommand: true
 #if set to false the command /seedevice will be disabled
 
-SeeDeviceCommand_Format: "§eINFORMATIONS\n§6Player's Name: %name%\n§5Player's OS: %os%\n§dPlayer's Device: %device%\n§2Player's IP: $ip"
+SeeDeviceCommand_Format: "§eINFORMATIONS\n§6Player's Name: %name%\n§5Player's OS: %os%\n§dPlayer's Device: %device%\n§2Player's IP: %ip%"
 #The format is loaded when the plugin got started
 #LIST OF TAGS FOR THIS FORMAT
 # %name% -> represent the Name of the Player

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SeeDevice is a plugin working under the software pmmp
  *  Copyright (C) 2020  Palente
@@ -16,47 +17,60 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace Palente\SeeDevice\Commands;
+
 use Palente\SeeDevice\SeeDevice;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
-class SD extends Command {
-    private $plugin;
-    private $format;
-    public function __construct(string $name, SeeDevice $caller){
+use pocketmine\player\Player;
+
+class SD extends Command
+{
+    /** @var SeeDevice */
+    private SeeDevice $plugin;
+
+    public function __construct(string $name, SeeDevice $caller)
+    {
         parent::__construct(
             $name,
             "See the device/OS of a player",
             "/seedevice [player]",
             ["sd"]
-            );
-        $this->setPermission("SeeDevice.command.sd");
+        );
+        $this->setPermission("SeeDevice.seedevice");
         $this->plugin = $caller;
-        $this->format = $caller->getSDCFormat();
     }
-    public function execute(CommandSender $sender, $command, array $args){
+
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
+    {
         $pr = SeeDevice::$prefix;
-        if(!$this->testPermission($sender))return;
-        if(!$this->plugin->seeDeviceCommandEnabled)return;
-        if(count($args) == 0){
-            //Why does a console want to see his device.
-            if(!$sender instanceof Player) return;
-            if(!$this->plugin->getPlayerOs($sender) OR !$this->plugin->getPlayerDevice($sender)){
-                $sender->sendMessage($pr."§4What Happened, i can't get your OS! try again later! ");
+        if (!$this->testPermission($sender)) {
+            return;
+        }
+        if (!$this->plugin->seeDeviceCommandEnabled) {
+            return;
+        }
+        if (count($args) === 0) {
+            if (!$sender instanceof Player) {
                 return;
             }
-            $sender->sendMessage($pr.$this->replaceFormat($sender));
-            return;
-        }else{
-            $pl = $this->plugin->getServer()->getPlayer($args[0]);
-            if(!$pl instanceof Player){$sender->sendMessage($pr."§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!"); return;}
-            if(!$this->plugin->getPlayerOs($pl) OR !$this->plugin->getPlayerDevice($pl)){
-                $sender->sendMessage($pr."This player has some problem with SeeDevice, try again later!");
+            if (!$this->plugin->getPlayerOs($sender) || !$this->plugin->getPlayerDevice($sender)) {
+                $sender->sendMessage("{$pr}§4What Happened, i can't get your OS! try again later! ");
                 return;
             }
-            $sender->sendMessage($pr.$this->replaceFormat($pl));
-            return;
+            $sender->sendMessage($pr . $this->replaceFormat($sender));
+        } else {
+            $pl = $this->plugin->getServer()->getPlayerByPrefix($args[0]);
+            if (!$pl instanceof Player) {
+                $sender->sendMessage("{$pr}§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!");
+                return;
+            }
+            if (!$this->plugin->getPlayerOs($pl) || !$this->plugin->getPlayerDevice($pl)) {
+                $sender->sendMessage("{$pr}This player has some problem with SeeDevice, try again later!");
+                return;
+            }
+            $sender->sendMessage($pr . $this->replaceFormat($pl));
         }
     }
 
@@ -65,13 +79,8 @@ class SD extends Command {
      * @return string
      * replace the tags with real text! (Magic function)
      */
-    private function replaceFormat(Player $player) : string{
-        $format = $this->format;
-        $format = str_replace("%name%", $player->getName(), $format);
-        $format = str_replace("%os%", $this->plugin->getPlayerOs($player) , $format);
-        $format = str_replace("%fakeos%", $this->plugin->getFakeOs($player), $format);
-        $format = str_replace("%device%", $this->plugin->getPlayerDevice($player), $format);
-        $format = str_replace("%ip%", $player->getAddress(), $format);
-        return $format;
+    private function replaceFormat(Player $player): string
+    {
+        return str_replace(array("%name%", "%os%", "%fakeos%", "%device%", "%ip%"), array($player->getName(), $this->plugin->getPlayerOs($player), $this->plugin->getFakeOs($player), $this->plugin->getPlayerDevice($player), $player->getNetworkSession()->getIp()), $this->plugin->getSDCFormat());
     }
 }

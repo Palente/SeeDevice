@@ -1,35 +1,22 @@
 name: SeeDevice
 main: Palente\SeeDevice\SeeDevice
 author: Palente
-api: 3.0.0
-version: 1.1.0
+api: 4.0.0
+version: 1.2.0
 description: "More easy to get the Device/OS of a Player"
-website: "https://github.com/Palente"
 
-commands: 
-  seedevice: 
+commands:
+  seedevice:
     description: "See The device of a player"
-    permission: SeeDevice.command.sd
+    permission: SeeDevice.seedevice
     usage: "/seedevice [player]"
   fakeos:
     description: "Change the device"
-    permission: SeeDevice.command.fakeos
+    permission: SeeDevice.fakeos
     usage: "/fakeos <player-self> <name_of_device>"
 
 permissions:
- SeeDevice.*:
-  default: op
-  description: Allows to control all of Available thing
-  children:
-   SeeDevice.command.*:
+  SeeDevice.fakeos:
     default: op
-    description: Allows to use all of commands 
-    children:
-     SeeDevice.command.sd:
-      default: op
-      description: Allows to see a the device of a player
-     SeeDevice.command.fakeos:
-      default: op
-      description: Allows to edit the device of a Player
-
-#with yamllint.com
+  SeeDevice.seedevice:
+    default: op
