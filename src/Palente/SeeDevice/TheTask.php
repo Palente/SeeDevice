@@ -28,13 +28,10 @@ class TheTask extends Task
 {
     /** @var SeeDevice */
     private SeeDevice $plugin;
-    /** @var string */
-    private string $format;
 
     public function __construct(SeeDevice $caller)
     {
         $this->plugin = $caller;
-        $this->format = $this->plugin->getOOHFormat();
     }
 
     public function onRun(): void
@@ -51,7 +48,6 @@ class TheTask extends Task
      */
     private function replaceFormat(Player $player): string
     {
-        $format = $this->format;
-        return str_replace(array("%health%", "%max_health%", "%os%"), array(round($player->getHealth()), $player->getMaxHealth(), (is_null($this->plugin->getFakeOs($player)) ? $this->plugin->getPlayerOs($player) : $this->plugin->getFakeOs($player))), $format);
+        return str_replace(array("%health%", "%max_health%", "%os%"), array(round($player->getHealth()), $player->getMaxHealth(), (is_null($this->plugin->getFakeOs($player)) ? $this->plugin->getPlayerOs($player) : $this->plugin->getFakeOs($player))), $this->plugin->getOOHFormat());
     }
 }
