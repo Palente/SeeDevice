@@ -33,16 +33,16 @@ class SeeDevice extends PluginBase implements Listener
     /** @var string */
     public static string $prefix = "§a[SeeDevice] §f";
     /** @var self|null */
-    private static ?self $instance;
+    private static ?SeeDevice $instance;
     /** @var bool */
     public bool $fakeOsEnabled = true;
     /** @var bool */
     public bool $seeDeviceCommandEnabled = true;
-    /** @var array */
+    /** @var array<string> */
     private array $os = [];
-    /** @var array */
+    /** @var array<string> */
     private array $fakeOs = [];
-    /** @var array */
+    /** @var array<string> */
     private array $device = [];
     /** @var string */
     private string $formatSDCommand = ""; //Format SeeDevice Command
@@ -52,9 +52,9 @@ class SeeDevice extends PluginBase implements Listener
     private array $listOfOs = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows10", "Windows", "EducalVersion", "Dedicated", "PlayStation4", "Switch", "XboxOne"];
 
     /**
-     * @return static|null
+     * @return SeeDevice|null
      */
-    public static function getInstance(): ?self
+    public static function getInstance(): ?SeeDevice
     {
         return self::$instance;
     }
@@ -74,8 +74,9 @@ class SeeDevice extends PluginBase implements Listener
             $this->saveResource('config.yml');
         }
         $config = new Config($this->getDataFolder() . 'config.yml', Config::YAML);
-        if ($config->get("Enable_ShowOsOverHead", true) === true) {
-            $this->OOHFormat = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
+        $heados = $config->get("OsOverHead_Format", "§f\n[§c%health%§f/%max_health%]\n§5%os%");
+        if (($config->get("Enable_ShowOsOverHead", true) === true) && is_string($heados)) {
+            $this->OOHFormat = $heados;
             $this->getLogger()->info("[OsOverHead] is enabled!");
             $this->getScheduler()->scheduleRepeatingTask(new TheTask($this), 20);
         } else {
@@ -88,9 +89,10 @@ class SeeDevice extends PluginBase implements Listener
             $this->fakeOsEnabled = false;
             $this->getLogger()->info("[Command] The Command FakeOs is disabled! To enable it set 'Enable_FakeOs' to true in config.yml");
         }
-        if ($config->get("Enable_SeeDeviceCommand", true) === true) {
+        $format = $config->get("SeeDeviceCommand_Format");
+        if (($config->get("Enable_SeeDeviceCommand", true) === true) && is_string($format)) {
             $this->seeDeviceCommandEnabled = true;
-            $this->formatSDCommand = $config->get("SeeDeviceCommand_Format", "");
+            $this->formatSDCommand = $format;
             $this->getLogger()->info("[Command] The Command SeeDevice is enabled.");
         } else {
             $this->seeDeviceCommandEnabled = false;
@@ -106,6 +108,7 @@ class SeeDevice extends PluginBase implements Listener
     {
         $player = $event->getPlayer();
         $data = $player->getPlayerInfo()->getExtraData();
+        /** @var array<string> $data */
         if ($data["DeviceOS"] !== null) {
             $this->os[$player->getName()] = $data["DeviceOS"];
         }
@@ -121,7 +124,7 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function getPlayerOs(Player $player): ?string
     {
-        if (!isset($this->os[$player->getName()]) || $this->os[$player->getName()] === null) {
+        if (!isset($this->os[$player->getName()]) || is_null($this->os[$player->getName()])) {
             return null;
         }
         return $this->listOfOs[$this->os[$player->getName()]];
@@ -134,7 +137,7 @@ class SeeDevice extends PluginBase implements Listener
      */
     public function getPlayerDevice(Player $player): ?string
     {
-        if (!isset($this->device[$player->getName()]) || $this->device[$player->getName()] === null) {
+        if (!isset($this->device[$player->getName()]) || is_null($this->device[$player->getName()])) {
             return null;
         }
         return $this->device[$player->getName()];

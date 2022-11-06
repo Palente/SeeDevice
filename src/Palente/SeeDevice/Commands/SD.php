@@ -56,18 +56,18 @@ class SD extends Command
                 return;
             }
             if (!$this->plugin->getPlayerOs($sender) || !$this->plugin->getPlayerDevice($sender)) {
-                $sender->sendMessage($pr . "§4What Happened, i can't get your OS! try again later! ");
+                $sender->sendMessage("{$pr}§4What Happened, i can't get your OS! try again later! ");
                 return;
             }
             $sender->sendMessage($pr . $this->replaceFormat($sender));
         } else {
             $pl = $this->plugin->getServer()->getPlayerByPrefix($args[0]);
             if (!$pl instanceof Player) {
-                $sender->sendMessage($pr . "§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!");
+                $sender->sendMessage("{$pr}§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!");
                 return;
             }
             if (!$this->plugin->getPlayerOs($pl) || !$this->plugin->getPlayerDevice($pl)) {
-                $sender->sendMessage($pr . "This player has some problem with SeeDevice, try again later!");
+                $sender->sendMessage("{$pr}This player has some problem with SeeDevice, try again later!");
                 return;
             }
             $sender->sendMessage($pr . $this->replaceFormat($pl));

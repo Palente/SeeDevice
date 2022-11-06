@@ -45,6 +45,9 @@ class FakeOs extends Command
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
         $usages = $this->getUsage();
+        if (!is_string($usages)) {
+            $usages = "/fakeos <player-self> <OS>";
+        }
         $pr = SeeDevice::$prefix;
         if (!$this->plugin->fakeOsEnabled) {
             return;
@@ -53,37 +56,37 @@ class FakeOs extends Command
             return;
         }
         if (count($args) !== 2) {
-            $sender->sendMessage($pr . "§4ERROR:§f Bad Usage of the Command! Usage:" . $usages);
+            $sender->sendMessage("{$pr}§4ERROR:§f Bad Usage of the Command! Usage: $usages");
             return;
         }
         if ($args[0] === "self") {
             if (!$sender instanceof Player) {
-                $sender->sendMessage($pr . "§4ERROR:§f Well, you no longer want to be a machine, i can't help you!");
+                $sender->sendMessage("{$pr}§4ERROR:§f Well, you no longer want to be a machine, i can't help you!");
                 return;
             }
             $fakeOs = implode(" ", array_slice($args, 1));
             if ($fakeOs === "") {
                 $this->plugin->removeFakeOs($sender);
-                $sender->sendMessage($pr . "You have successfully removed your fake Os Name!");
+                $sender->sendMessage("{$pr}You have successfully removed your fake Os Name!");
                 return;
             }
             $os = $this->plugin->getPlayerOs($sender);
             $this->plugin->setFakeOs($sender, $fakeOs);
-            $sender->sendMessage($pr . "You have successfully changed your os name.\n§3Before: $os\n§7Now: " . $this->plugin->getFakeOs($sender));
+            $sender->sendMessage("{$pr}You have successfully changed your os name.\n§3Before: $os\n§7Now: " . $this->plugin->getFakeOs($sender));
         } else {
             $pl = $this->plugin->getServer()->getPlayerByPrefix($args[0]);
             if (!$pl instanceof Player) {
-                $sender->sendMessage($pr . "§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!");
+                $sender->sendMessage("{$pr}§4ERROR: §fThe player with the name \"$args[0]\" seem to don't be §aONLINE!");
                 return;
             }
             $fakeOs = implode(" ", array_slice($args, 1));
             if ($fakeOs === "") {
                 $this->plugin->removeFakeOs($pl);
-                $sender->sendMessage($pr . "You have successfully removed {$pl->getName()}'s fake Os Name!");
+                $sender->sendMessage("{$pr}You have successfully removed {$pl->getName()}'s fake Os Name!");
                 return;
             }
             $this->plugin->setFakeOs($pl, $fakeOs);
-            $sender->sendMessage($pr . "You have successfully changed the os name of " . $pl->getName() . "\n§3To:" . $this->plugin->getFakeOs($pl));
+            $sender->sendMessage("{$pr}You have successfully changed the os name of " . $pl->getName() . "\n§3To:" . $this->plugin->getFakeOs($pl));
         }
     }
 }
