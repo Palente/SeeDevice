@@ -29,8 +29,6 @@ class SD extends Command
 {
     /** @var SeeDevice */
     private SeeDevice $plugin;
-    /** @var string */
-    private string $format;
 
     public function __construct(string $name, SeeDevice $caller)
     {
@@ -42,7 +40,6 @@ class SD extends Command
         );
         $this->setPermission("SeeDevice.seedevice");
         $this->plugin = $caller;
-        $this->format = $caller->getSDCFormat();
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
@@ -84,7 +81,6 @@ class SD extends Command
      */
     private function replaceFormat(Player $player): string
     {
-        $format = $this->format;
-        return str_replace(array("%name%", "%os%", "%fakeos%", "%device%", "%ip%"), array($player->getName(), $this->plugin->getPlayerOs($player), $this->plugin->getFakeOs($player), $this->plugin->getPlayerDevice($player), $player->getNetworkSession()->getIp()), $format);
+        return str_replace(array("%name%", "%os%", "%fakeos%", "%device%", "%ip%"), array($player->getName(), $this->plugin->getPlayerOs($player), $this->plugin->getFakeOs($player), $this->plugin->getPlayerDevice($player), $player->getNetworkSession()->getIp()), $this->plugin->getSDCFormat());
     }
 }

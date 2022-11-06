@@ -83,7 +83,7 @@ class FakeOs extends Command
                 return;
             }
             $this->plugin->setFakeOs($pl, $fakeOs);
-            $sender->sendMessage($pr . "You have successfully changed the os name of " . $pl->getName() . "\n3To:" . $this->plugin->getFakeOs($pl));
+            $sender->sendMessage($pr . "You have successfully changed the os name of " . $pl->getName() . "\n§3To:" . $this->plugin->getFakeOs($pl));
         }
     }
 }
